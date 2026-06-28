@@ -66,6 +66,8 @@ public class ServerRunnable implements Runnable {
             this.bindException = e;
             return;
         }
+        // [Ch15 多线程] Runnable 实现 — 由 NanoHTTPD.start() 中 new Thread(serverRunnable).start() 启动
+        // [Ch13 集合框架] accept() 返回的 Socket 交予 asyncRunner.exec() 分发，每个请求一个独立线程
         do {
             try {
                 final Socket finalAccept = httpd.getMyServerSocket().accept();

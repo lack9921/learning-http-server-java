@@ -52,6 +52,8 @@ public class DefaultAsyncRunner implements IAsyncRunner {
 
     protected long requestCount;
 
+    // [Ch13 泛型] synchronizedList 包装 ArrayList<ClientHandler>，线程安全的运行列表
+    // [Ch15 多线程] 不使用同步包装会引发 ConcurrentModificationException
     private final List<ClientHandler> running = Collections.synchronizedList(new ArrayList<ClientHandler>());
 
     /**
@@ -81,6 +83,9 @@ public class DefaultAsyncRunner implements IAsyncRunner {
         createThread(clientHandler).start();
     }
 
+    // [Ch15 多线程] 每个客户端请求分配独立线程
+    // - setDaemon(true) → JVM 不等待守护线程，实现优雅关闭
+    // - setName() → 命名线程，便于 profile 调试
     protected Thread createThread(ClientHandler clientHandler) {
         Thread t = new Thread(clientHandler);
         t.setDaemon(true);

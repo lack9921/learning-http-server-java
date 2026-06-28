@@ -64,10 +64,13 @@ public class ClientHandler implements Runnable {
         NanoHTTPD.safeClose(this.acceptSocket);
     }
 
+    // [Ch15 多线程] ClientHandler 实现 Runnable，由 DefaultAsyncRunner.exec() 分发到线程池
     @Override
     public void run() {
         OutputStream outputStream = null;
         try {
+            // [Ch12 IO流] Socket.getOutputStream() → 写 HTTP 响应到客户端
+            // [ITempFileManager 工厂] 使用工厂模式创建 TempFileManager
             outputStream = this.acceptSocket.getOutputStream();
             ITempFileManager tempFileManager = httpd.getTempFileManagerFactory().create();
             HTTPSession session = new HTTPSession(httpd, tempFileManager, this.inputStream, outputStream, this.acceptSocket.getInetAddress());
